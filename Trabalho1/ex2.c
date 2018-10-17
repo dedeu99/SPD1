@@ -7,7 +7,7 @@
 
 char characters[MAX_NUM_CHARACTERS];
 int numCharacters=0;
-char exit=0;
+char exitM=0;
 pthread_mutex_t exitMutex;
 pthread_t thread,thread2;
 
@@ -42,7 +42,7 @@ void *readInput(){
 		characters[numCharacters++]=c;
 	}
 	pthread_mutex_lock (&exitMutex);
-	exit=1;
+	exitM=1;
     pthread_mutex_unlock (&exitMutex);
 
     pthread_exit((void*) 0);
@@ -50,12 +50,12 @@ void *readInput(){
 void *feedback(){
 
 	printf("LOADING");
-	bool cont;
+	char cont;
 
     while(cont){
     	printf(".");
     	pthread_mutex_lock (&exitMutex);
-		cont=!exit;
+		cont=!exitM;
     	pthread_mutex_unlock (&exitMutex);
     }
 
