@@ -7,7 +7,7 @@
 
 char[MAX_NUM_CHARACTERS] characters;
 int numCharacters=0;
-bool exit=FALSE;
+char exit=0;
 
 
 int main(int argc, char* argv){
@@ -40,9 +40,9 @@ void *readInput(){
 	while(numCharacters<MAX_NUM_CHARACTERS && c = getchar( ) != EXIT_KEY){
 		characters[numCharacters++]=c;
 	}
-	pthread_mutex_lock (&mutexsum);
-	exit=TRUE;
-    pthread_mutex_unlock (&mutexsum);
+	pthread_mutex_lock (&exitMutex);
+	exit=1;
+    pthread_mutex_unlock (&exitMutex);
 
     pthread_exit((void*) 0);
 }
@@ -52,10 +52,10 @@ void *feedback(){
 	bool cont;
 
     while(cont){
-    	printf('.');
-    	pthread_mutex_lock (&mutexsum);
+    	printf(".");
+    	pthread_mutex_lock (&exitMutex);
 		cont=!exit;
-    	pthread_mutex_unlock (&mutexsum);
+    	pthread_mutex_unlock (&exitMutex);
     }
 
     printf("/n");
