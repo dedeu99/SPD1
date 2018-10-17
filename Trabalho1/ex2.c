@@ -19,8 +19,8 @@ int main(int argc, char* argv){
 	
 	printf("PRESS %c AT ANY TIME TO QUIT\n");
 
-	rc=pthread_create(thread,NULL,readInput, NULL );
-	rc2=pthread_create(thread,NULL,feedback, NULL );
+	rc=pthread_create(&thread,NULL,readInput, NULL );
+	rc2=pthread_create(&thread,NULL,feedback, NULL );
 	if (rc || rc2){
         printf("ERROR:		 return code from pthread_create() is %d\n", rc);
         exit(-1);
@@ -38,7 +38,7 @@ void *readInput(){
 
 	int c;
 	
-	while(numCharacters<MAX_NUM_CHARACTERS && c = getchar( ) != EXIT_KEY){
+	while(numCharacters<MAX_NUM_CHARACTERS && (c = getchar( )) != EXIT_KEY){
 		characters[numCharacters++]=c;
 	}
 	pthread_mutex_lock (&exitMutex);
