@@ -8,14 +8,15 @@
 char[MAX_NUM_CHARACTERS] characters;
 int numCharacters=0;
 char exit=0;
-
+pthread_mutex_t exitMutex;
+pthread_t thread,thread2;
 
 int main(int argc, char* argv){
 	void* status;
-	pthread_mutex_t exitMutex;
+	
 	int rc,rc2;
 	pthread_mutex_init(&exitMutex, NULL)
-	pthread_t thread,thread2;
+	
 	printf("PRESS %c AT ANY TIME TO QUIT\n");
 
 	rc=pthread_create(thread,NULL,readInput, NULL );
