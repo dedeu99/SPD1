@@ -5,13 +5,13 @@
 #define MAX_NUM_CHARACTERS 50
 
 
-char[MAX_NUM_CHARACTERS] characters;
+char characters[MAX_NUM_CHARACTERS];
 int numCharacters=0;
 char exit=0;
 pthread_mutex_t exitMutex;
 pthread_t thread,thread2;
 
-int main(int argc, char* argv){
+int main(int argc, char** argv){
 	void* status;
 	
 	int rc,rc2;
