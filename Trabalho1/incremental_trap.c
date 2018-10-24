@@ -1,10 +1,16 @@
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
 #include <pthread.h>
-#define MAX_VALUE 20
+
+#define NUM_THREADS 2
+#define MAX_VALUE 10
+
+
+
 int i=0;
+
+
 void* inc(void * threadid) {
 	while(i<MAX_VALUE){
 		i++;
@@ -12,15 +18,21 @@ void* inc(void * threadid) {
 	}
  }
 
-
 int main() {
-  pthread_t t,t2;
-  int res = pthread_create(&t, NULL, inc, threadid);
-
-
-  res = pthread_create(&t2, NULL, inc, threadid);
   
 
+	pthread_t threads[NUM_THREADS];
+	int i=0;
+
+	for(i=0;i<NUM_THREADS;++i){
+
+    	int res = pthread_create(&threads[i], NULL, inc, (void*)i);
+    	if(res){
+	      printf("ERROR:     return code from pthread_create() is %d\n", res);
+	      exit(-1);
+	    }    
+	}
   
-  exit(0);
+  
+	pthread_exit(NULL);
 }
