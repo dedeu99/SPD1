@@ -18,7 +18,6 @@ void* inc(void * threadid) {
 	}
 	pthread_exit(NULL);
 }
-int i=0;
 int main(int argc,  char** argv) {
   
 	if(argc==3){
@@ -36,7 +35,7 @@ int main(int argc,  char** argv) {
 	      printf("ERROR:     return code from pthread_create() is %d\n", res);
 	      exit(-1);
 	    }    
-	}
+	}	
   
   
 	pthread_exit(NULL);
