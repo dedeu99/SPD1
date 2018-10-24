@@ -19,10 +19,10 @@ int main() {
     int res = pthread_create(&threads[i], NULL, hello, (void*)i);
     if(res){
       printf("ERROR:     return code from pthread_create() is %d\n", res);
-      exit(-1);
+      exit(42);
     }    
   }
   
   
-  exit(0);
+  pthread_exit(NULL);
 }
