@@ -7,6 +7,8 @@
 
 pthread_t threads[NUM_THREADS];
 
+pthread_attr_t attr;
+pthread_cond_t count_reached;
 
 void* count(){
 
@@ -20,8 +22,6 @@ void* count(){
 
 int main(){
 
-	pthread_attr_t attr;
-	pthread_cond_t count_reached;
 
 
 	pthread_attr_init(&attr);
@@ -31,10 +31,10 @@ int main(){
 
 
 
-
+	int errcode;
 	for(int i=0;i<NUM_THREADS;++i)
-		if(threads[i]=pthread_create(&thread,NULL,count, NULL )){
-        	printf("ERROR:		 return code from pthread_create() is %d\n", threads[i]);
+		if(errcode=pthread_create(&threads[i],NULL,count, NULL )){
+        	printf("ERROR:		 return code from pthread_create() is %d\n", errcode);
         	exit(-1);
     	}
 
