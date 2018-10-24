@@ -8,7 +8,7 @@
 pthread_t threads[NUM_THREADS];
 
 
-void count(){
+void* count(){
 
 	for(int i=0;i<FINISH_VALUE;++i);
 
@@ -34,13 +34,13 @@ int main(){
 
 	for(int i=0;i<NUM_THREADS;++i)
 		if(threads[i]=pthread_create(&thread,NULL,count, NULL )){
-        	printf("ERROR:		 return code from pthread_create() is %d\n", rc);
+        	printf("ERROR:		 return code from pthread_create() is %d\n", threads[i]);
         	exit(-1);
     	}
 
-    while(pthread_cond_wait());
+    while(pthread_cond_wait(&count_reached,NULL));
 
-    for (i=0; i<NUM_THREADS; i++) {
+    for (int i=0; i<NUM_THREADS; i++) {
      pthread_join(threads[i], NULL);
 
 
