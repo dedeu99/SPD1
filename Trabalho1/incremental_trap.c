@@ -7,25 +7,29 @@
 #define MAX_VALUE 10
 
 
-
+int nthreads=NUM_THREADS;
 int i=0;
-
+int max=MAX_VALUE;
 
 void* inc(void * threadid) {
-	while(i<MAX_VALUE){
+	while(i<max){
 		i++;
 		printf("THREAD %ld incremented value to %d\n",(long)threadid,i);
 	}
 	pthread_exit(NULL);
 }
 int i=0;
-int main() {
+int main(int argc,  char** argv) {
   
-
-	pthread_t threads[NUM_THREADS];
+	if(argc==3){
+		nthreads=atoi(argv[1]);
+		max=atoi(argv[2]);
+	}
+	
+	pthread_t threads[nthreads];
 	
 
-	for(i=0;i<NUM_THREADS;++i){
+	for(i=0;i<nthreads;++i){
 
     	int res = pthread_create(&threads[i], NULL, inc, (void*)i);
     	if(res){
