@@ -12,10 +12,7 @@ int i=0;
 int max=MAX_VALUE;
 
 void* inc(void * threadid) {
-	while(i<max){
 		i++;
-		printf("THREAD %ld incremented value to %d\n",(long)threadid,i);
-	}
 	pthread_exit(NULL);
 }
 int t=0;
@@ -40,6 +37,6 @@ int main(int argc,  char** argv) {
 	for(t=0;t<nthreads;++t)
   		pthread_join(threads[t], NULL);
 
-  	printf("------%d",i);
+  	printf("------%d\n",i);
 	pthread_exit(NULL);
 }
