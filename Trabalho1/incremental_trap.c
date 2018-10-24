@@ -14,16 +14,16 @@ int i=0;
 void* inc(void * threadid) {
 	while(i<MAX_VALUE){
 		i++;
-		printf("THR./EAD %ld incremented value to %d\n",(long)threadid,i);
+		printf("THREAD %ld incremented value to %d\n",(long)threadid,i);
 	}
 	pthread_exit(NULL);
- }
-
+}
+int i=0;
 int main() {
   
 
 	pthread_t threads[NUM_THREADS];
-	int i=0;
+	
 
 	for(i=0;i<NUM_THREADS;++i){
 
