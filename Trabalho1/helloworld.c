@@ -4,6 +4,7 @@
 
 void* hello(void * thread) {
  printf("HELLO WORLD BY THREAD %ld",(long)thread);
+ pthread_exit(NULL);
 }
 
 
