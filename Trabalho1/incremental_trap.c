@@ -37,7 +37,9 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}	
-  
-  
+	for(t=0;t<nthreads;++t){
+  		pthread_join(*threads[t], NULL);
+
+  	printf("------%d",i);
 	pthread_exit(NULL);
 }
