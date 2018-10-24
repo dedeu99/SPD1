@@ -4,12 +4,10 @@
 #include <pthread.h>
 
 #define NUM_THREADS 2
-#define MAX_VALUE 10
 
 
 int nthreads=NUM_THREADS;
 int i=0;
-int max=MAX_VALUE;
 
 void* inc(void * threadid) {
 		i++;
@@ -18,10 +16,9 @@ void* inc(void * threadid) {
 int t=0;
 int main(int argc,  char** argv) {
   
-	if(argc==3){
+	if(argc==2)
 		nthreads=atoi(argv[1]);
-		max=atoi(argv[2]);
-	}
+	
 	
 	pthread_t threads[nthreads];
 	
