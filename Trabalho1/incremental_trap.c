@@ -31,7 +31,7 @@ int main(int argc,  char** argv) {
 
 	for(t=0;t<nthreads;++t){
 
-    	int res = pthread_create(&threads[i], NULL, inc, (void*)t);
+    	int res = pthread_create(&threads[t], NULL, inc, (void*)t);
     	if(res){
 	      printf("ERROR:     return code from pthread_create() is %d\n", res);
 	      exit(-1);
