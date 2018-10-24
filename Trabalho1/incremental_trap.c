@@ -14,8 +14,9 @@ int i=0;
 void* inc(void * threadid) {
 	while(i<MAX_VALUE){
 		i++;
-		printf("THREAD %ld incremented value to %d",(long)threadid,i);
+		printf("THR./EAD %ld incremented value to %d\n",(long)threadid,i);
 	}
+	pthread_exit(NULL);
  }
 
 int main() {

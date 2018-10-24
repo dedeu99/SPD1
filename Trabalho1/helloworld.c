@@ -5,7 +5,9 @@
 #define NUM_THREADS 5
 
 void* hello(void * thread) {
+
   printf("HELLO WORLD BY THREAD %ld\n",(long)thread);
+  
   pthread_exit(NULL);
 }
 
