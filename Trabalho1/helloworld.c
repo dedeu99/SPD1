@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#define NUM_THREADS 5
+
 
 void* hello(void * thread) {
 
@@ -11,7 +11,7 @@ void* hello(void * thread) {
   pthread_exit(NULL);
 }
 
-int main() {
+int main(int argc,  char** argv) {
   int nthreads=0;
   if(argc==2)
     nthreads=atoi(argv[1]);
