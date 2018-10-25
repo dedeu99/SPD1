@@ -4,8 +4,11 @@ LDFLAGS = -lm -pthread
 
 HELLO = helloworld.c
 INCTRAP = incremental_trap.c
+MUTEXES = mutexes.c
+DEADLOCK = deadlock.c
+NODEADLOCK = no_deadlock.c
 
-all: hello inc_trap
+all: hello inc_trap mutexes deadlock no_deadlock
 .PHONY: all
 
 
@@ -15,6 +18,17 @@ hello:	$(HELLO) makefile
 inc_trap: $(INCTRAP) makefile
 	$(CC) $(CFLAGS) $(INCTRAP) $(LDFLAGS) -o $@
 
+mutexes: $(MUTEXES) makefile
+	$(CC) $(CFLAGS) $(MUTEXES) $(LDFLAGS) -o $@
+
+deadlock: $(DEADLOCK) makefile
+	$(CC) $(CFLAGS) $(DEADLOCK) $(LDFLAGS) -o $@
+
+no_deadlock: $(NODEADLOCK) makefile
+	$(CC) $(CFLAGS) $(NODEADLOCK) $(LDFLAGS) -o $@
+
+
+
 clean:
-	rm -f hello int_trap
+	rm -f hello int_trap mutexes deadlock no_deadlock
 
