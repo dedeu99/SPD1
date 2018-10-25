@@ -1,32 +1,58 @@
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
 #include <pthread.h>
-#define MAX_VALUE 20
-int i=0;
 
-pthread_mutex_t value_mutex;
+
+int i=0;
+pthread_mutex_t i_mutex;
+
 void* inc(void * threadid) {
 
-	while(i<MAX_VALUE){
-		pthread_mutex_lock(&value_mutex);
-		i++:
-		pthread_mutex_unlock(&value_mutex);
-		printf("THREAD %ld incremented value to %d",(long)threadid,i);
-	}
+	pthread_mutex_lock(&i_mutex);
+	i++:
+	pthread_mutex_unlock(&i_mutex);
+
+	pthread_exit(NULL);
 }
 
-
-int main() {
-	pthread_mutex_init(&value_mutex);
-  pthread_t t,t2;
-  int res = pthread_create(&t, NULL, inc, threadid);
-
-
-  res = pthread_create(&t2, NULL, inc, threadid);
+int main(int argc,  char** argv) {
   
+	int nthreads=0;
+	if(argc==2)
+		nthreads=atoi(argv[1]);
+	else{
+		printf("USAGE: mutexes <threads>\n"
+      "\n"
+      "ARGUMENTS\n"
+      "  <threads>  Number of threads to create that increment a value\n"
+      "\n"
+      "Since every thread increment the same variable only once, it's expected that the final result will be == to <threads>\n"
+      "Try running '$int_trap 10' to confirm such behaviour\n"
+      "Afterwards try running '$int_trap 999' several times and see what happends\n"
+      "To ease the repetion of commands try the following:\n"
+      "'$int_trap 999'\n"
+      "'$!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;'\n");
 
-  
-  exit(0);
+
+	}	
+	
+	pthread_t threads[nthreads];
+	
+	pthread_mutex_init(&i_mutex,NULL);
+
+	for(int t=0;t<nthreads;++t){
+
+    	int res = pthread_create(&threads[t], NULL, inc, (void*)t);
+    	if(res){
+	      printf("ERROR:     return code from pthread_create() is %d\n", res);
+	      exit(-1);
+	    }    
+	}	
+	for(int t=0;t<nthreads;++t)
+  		pthread_join(threads[t], NULL);
+
+  	printf("Number of threads:%d   incremental result:%d\n",nthreads,i);
+  	pthread_mutex_destroy();
+	pthread_exit(NULL);
 }
