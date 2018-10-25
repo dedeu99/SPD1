@@ -7,12 +7,24 @@
 void* hello(void * thread) {
 
   printf("HELLO WORLD BY THREAD %ld\n",(long)thread);
-  
+
   pthread_exit(NULL);
 }
 
 int main() {
-  
+  int nthreads=0;
+  if(argc==2)
+    nthreads=atoi(argv[1]);
+  else{
+    printf(
+    "USAGE: helloworld <threads>\n"
+    "\n"
+    "ARGUMENTS\n"
+    "  <threads>  Number of threads to create that increment a value\n"
+    "\n"
+    "Creates <threads> threads and makes them print their a message with their index in the pool to stdout.\n");
+    exit(0);
+  } 
   pthread_t threads[NUM_THREADS];
   int i=0;
 
