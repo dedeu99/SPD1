@@ -2,17 +2,19 @@ CC = gcc
 CFLAGS = -Wall -std=gnu99 
 LDFLAGS = -lm -pthread
 
-CORRIDA = corrida.c
+HELLO = helloworld.c
+INCTRAP = incremental_trap.c
 
-all: corrida
+all: hello inc_trap
 .PHONY: all
 
 
-corrida:	$(CORRIDA) makefile
-	$(CC) $(CFLAGS) $(CORRIDA) $(LDFLAGS) -o $@ 
+hello:	$(HELLO) makefile
+	$(CC) $(CFLAGS) $(HELLO) $(LDFLAGS) -o $@ 
 
-
+inc_trap: $(INCTRAP) makefile
+	$(CC) $(CFLAGS) $(INCTRAP) $(LDFLAGS) -o $@
 
 clean:
-	rm -f corrida
+	rm -f hello int_trap
 
