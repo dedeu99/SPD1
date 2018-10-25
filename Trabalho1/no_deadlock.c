@@ -12,7 +12,7 @@ void* inc(void * threadid) {
 	while(i<max)
 	{
 		pthread_mutex_lock(&i_mutex);
-		if(!pthread_mutex_trylock(&j_mutex))
+		if(!pthread_mutex_trylock(&j_mutex)&&i<max)
 		{
 			i++;
 			j--;
@@ -23,9 +23,9 @@ void* inc(void * threadid) {
 	pthread_exit(NULL);
 }
 void* inc2(void * threadid) {
-	while(i<max){
+	while(i<max-1){
 		pthread_mutex_lock(&j_mutex);
-		if(!pthread_mutex_trylock(&i_mutex))
+		if(!pthread_mutex_trylock(&i_mutex)&&i<max-1)
 		{
 			i+=2;
 			j++;

@@ -20,7 +20,7 @@ void* inc(void * threadid) {
 	pthread_exit(NULL);
 }
 void* inc2(void * threadid) {
-	while(i<max){
+	while(i<max-1){
 		pthread_mutex_lock(&j_mutex);
 		pthread_mutex_lock(&i_mutex);
 		i+=2;
