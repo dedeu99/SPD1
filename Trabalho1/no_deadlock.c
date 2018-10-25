@@ -70,35 +70,4 @@ int main(int argc,  char** argv) {
   	printf("Number of threads:%d   incremental result:%d    diff in number of executions:%d\n",nthreads,i,j);
   	pthread_mutex_destroy(&i_mutex);
 	pthread_exit(NULL);
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-
-int max=0;
-int i=0;
-int j=0;
-pthread_mutex_t i_mutex;
-pthread_mutex_t j_mutex;
-
-void* inc(void * threadid) {
-	while(i<max){
-		pthread_mutex_lock(&i_mutex);
-		pthread_mutex_lock(&j_mutex);
-		i++;
-		j--;
-		pthread_mutex_unlock(&j_mutex);
-		pthread_mutex_unlock(&i_mutex);
-	}
-	pthread_exit(NULL);
-}
-void* inc2(void * threadid) {
-	while(i<max){
-		pthread_mutex_lock(&j_mutex);
-		pthread_mutex_lock(&i_mutex);
-		i+=2;
-		j++;
-		pthread_mutex_unlock(&i_mutex);
-		pthread_mutex_lock(&j_mutex);
-	}
-	pthread_exit(NULL);
 }
