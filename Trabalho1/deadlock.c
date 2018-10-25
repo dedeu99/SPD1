@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-
+int max=0;
 int i=0;
 int j=0;
 pthread_mutex_t i_mutex;
@@ -34,7 +34,7 @@ void* inc2(void * threadid) {
 }
 
 int main(int argc,  char** argv) {
-  	int max;
+  	
 	
 	if(argc==2)
 		max=atoi(argv[1]);
