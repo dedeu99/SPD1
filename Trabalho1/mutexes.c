@@ -10,7 +10,7 @@ pthread_mutex_t i_mutex;
 void* inc(void * threadid) {
 
 	pthread_mutex_lock(&i_mutex);
-	i++:
+	i++;
 	pthread_mutex_unlock(&i_mutex);
 
 	pthread_exit(NULL);
@@ -53,6 +53,6 @@ int main(int argc,  char** argv) {
   		pthread_join(threads[t], NULL);
 
   	printf("Number of threads:%d   incremental result:%d\n",nthreads,i);
-  	pthread_mutex_destroy();
+  	pthread_mutex_destroy(&i_mutex);
 	pthread_exit(NULL);
 }
