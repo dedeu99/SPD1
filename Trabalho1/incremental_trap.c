@@ -46,6 +46,6 @@ int main(int argc,  char** argv) {
 	for(t=0;t<nthreads;++t)
   		pthread_join(threads[t], NULL);
 
-  	printf("Number of threads:%d   incremental result:\n",nthreads,i);
+  	printf("Number of threads:%d   incremental result:%d\n",nthreads,i);
 	pthread_exit(NULL);
 }
