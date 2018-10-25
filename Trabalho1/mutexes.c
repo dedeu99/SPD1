@@ -48,6 +48,9 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}	
+	
+	for(int t=0;t<nthreads;++t)
+  		pthread_join(threads[t], NULL);
   	printf("Number of threads:%d   incremental result:%d\n",nthreads,i);
   	pthread_mutex_destroy(&i_mutex);
 	pthread_exit(NULL);

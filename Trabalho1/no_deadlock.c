@@ -73,6 +73,9 @@ int main(int argc,  char** argv) {
       printf("ERROR:     return code from pthread_create() is %d\n", res);
       exit(-1);
     }  
+    
+	for(int t=0;t<nthreads;++t)
+  		pthread_join(threads[t], NULL);
   	printf("Number of threads:%d   incremental result:%d    diff in number of executions:%d\n",nthreads,i,j);
   	pthread_mutex_destroy(&i_mutex);
 	pthread_exit(NULL);
