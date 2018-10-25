@@ -16,7 +16,6 @@ void* inc(void * threadid) {
 		j--;
 		pthread_mutex_unlock(&j_mutex);
 		pthread_mutex_unlock(&i_mutex);
-		
 	}
 	pthread_exit(NULL);
 }
@@ -29,7 +28,6 @@ void* inc2(void * threadid) {
 		pthread_mutex_unlock(&i_mutex);
 		pthread_mutex_lock(&j_mutex);
 	}
-
 	pthread_exit(NULL);
 }
 
@@ -49,7 +47,7 @@ int main(int argc,  char** argv) {
 		"If result ==0, both threads executed the same number of times.\n"
 		"If result < 0, thread1 executed abs(result) more times .\n"
 		"If result > 0, thread2 executed abs(result) more times .\n"
-		"Afterwards try running '$deadlock <n>' and see what happens\n");
+		"Afterwards try running '$deadlock <n>' and see what happens for n=10 and n=999\n");
 		exit(0);
 	}	
 	int nthreads=2;
