@@ -1,50 +1,74 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
 #include <pthread.h>
-#define MAX_VALUE 20
+
+
 int i=0;
-int j=0;//se >0 inc2 correu j vezes a mais que inc, se j=0 correram exactamente o mesmo numero de vezes
-pthread_mutex_t value_mutex;
-pthread_mutex_t value2_mutex;
+int j=0;
+pthread_mutex_t i_mutex;
+pthread_mutex_t j_mutex;
+
 void* inc(void * threadid) {
 
-	while(i<MAX_VALUE){
-		pthread_mutex_lock(&value_mutex);
-		pthread_mutex_lock(&value2_mutex);
-		i++:
-		--j;
-		
-		pthread_mutex_unlock(&value2_mutex);
-		pthread_mutex_unlock(&value_mutex);
-		printf("THREAD %ld incremented value to %d",(long)threadid,i);
-	}
+	pthread_mutex_lock(&i_mutex);
+	pthread_mutex_lock(&j_mutex);
+	i++;
+	j--;
+	pthread_mutex_unlock(&i_mutex);
+	pthread_mutex_unlock(&j_mutex);
+
+	pthread_exit(NULL);
 }
 void* inc2(void * threadid) {
 
-	while(i<MAX_VALUE){
-		pthread_mutex_lock(&value2_mutex);
-		pthread_mutex_lock(&value_mutex);
-		i+=2:
-		++j;
-		pthread_mutex_unlock(&value_mutex);
-		pthread_mutex_unlock(&value2_mutex);
-		printf("THREAD %ld incremented value to %d",(long)threadid,i);
-	}
+	pthread_mutex_lock(&i_mutex);
+	i+=2;
+	J++;
+	pthread_mutex_unlock(&i_mutex);
+
+	pthread_exit(NULL);
 }
 
-
-int main() {
-	pthread_mutex_init(&value_mutex);
-	pthread_mutex_init(&value2_mutex);
-  pthread_t t,t2;
-  int res = pthread_create(&t, NULL, inc, threadid);
-
-
-  res = pthread_create(&t2, NULL, inc2, threadid);
+int main(int argc,  char** argv) {
   
+	
+	if(argc==2)
+		max=atoi(argv[1]);
+	else{
+		printf("USAGE: deadlock <max_number>\n"
+		"\n"
+		"ARGUMENTS\n"
+		"   <max_number>  maximum number two threads can count up to\n"
+		"\n"
+		"One thread increments a counter be one and one increments a counter by two up to <max_number>.\n"
+		"We count the difference between the number of times thread1 counted and thread2 executed.\n"
+		"If result ==0, both threads executed the same number of times.\n"
+		"If result < 0, thread1 executed abs(result) more times .\n"
+		"If result > 0, thread2 executed abs(result) more times .\n"
+		"Afterwards try running '$deadlock <n>' and see what happens\n");
+		exit(0);
+	}	
+	int nthreads=2;
+	pthread_t threads[nthreads];
+	
+	pthread_mutex_init(&i_mutex,NULL);
+	pthread_mutex_init(&j_mutex,NULL);
 
-  
-  exit(0);
+
+	int res = pthread_create(&threads[0], NULL, inc, NULL);
+	if(res){
+      printf("ERROR:     return code from pthread_create() is %d\n", res);
+      exit(-1);
+    }  
+    int res = pthread_create(&threads[1], NULL, inc2, NULL);
+	if(res){
+      printf("ERROR:     return code from pthread_create() is %d\n", res);
+      exit(-1);
+    }  
+	for(int t=0;t<nthreads;++t)
+  		pthread_join(threads[t], NULL);
+
+  	printf("Number of threads:%d   incremental result:%d    diff in number of executions:%d\n",nthreads,i,j);
+  	pthread_mutex_destroy(&i_mutex);
+	pthread_exit(NULL);
 }
