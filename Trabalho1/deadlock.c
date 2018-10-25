@@ -26,7 +26,7 @@ void* inc2(void * threadid) {
 		i+=2;
 		j++;
 		pthread_mutex_unlock(&i_mutex);
-		pthread_mutex_lock(&j_mutex);
+		pthread_mutex_unlock(&j_mutex);
 	}
 	pthread_exit(NULL);
 }
