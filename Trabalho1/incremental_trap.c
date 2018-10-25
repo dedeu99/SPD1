@@ -18,7 +18,7 @@ int main(int argc,  char** argv) {
 		nthreads=atoi(argv[1]);
 	else{
 		printf(
-		"USAGE: int_trap <threads>\n"
+		"USAGE: inc_trap <threads>\n"
 		"\n"
 		"ARGUMENTS\n"
 		"  <threads>  Number of threads to create that increment a value\n"
