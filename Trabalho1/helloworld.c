@@ -25,10 +25,10 @@ int main(int argc,  char** argv) {
     "Creates <threads> threads and makes them print their a message with their index in the pool to stdout.\n");
     exit(0);
   } 
-  pthread_t threads[NUM_THREADS];
+  pthread_t threads[nthreads];
   int i=0;
 
-  for(i=0;i<NUM_THREADS;++i){
+  for(i=0;i<nthreads;++i){
 
     int res = pthread_create(&threads[i], NULL, hello, (void*)i);
     if(res){
