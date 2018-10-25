@@ -9,28 +9,32 @@ pthread_mutex_t i_mutex;
 pthread_mutex_t j_mutex;
 
 void* inc(void * threadid) {
-
-	pthread_mutex_lock(&i_mutex);
-	pthread_mutex_lock(&j_mutex);
-	i++;
-	j--;
-	pthread_mutex_unlock(&i_mutex);
-	pthread_mutex_unlock(&j_mutex);
-
+	while(i<max){
+		pthread_mutex_lock(&i_mutex);
+		pthread_mutex_lock(&j_mutex);
+		i++;
+		j--;
+		pthread_mutex_unlock(&j_mutex);
+		pthread_mutex_unlock(&i_mutex);
+		
+	}
 	pthread_exit(NULL);
 }
 void* inc2(void * threadid) {
-
-	pthread_mutex_lock(&i_mutex);
-	i+=2;
-	J++;
-	pthread_mutex_unlock(&i_mutex);
+	while(i<max){
+		pthread_mutex_lock(&j_mutex);
+		pthread_mutex_lock(&i_mutex);
+		i+=2;
+		j++;
+		pthread_mutex_unlock(&i_mutex);
+		pthread_mutex_lock(&j_mutex);
+	}
 
 	pthread_exit(NULL);
 }
 
 int main(int argc,  char** argv) {
-  
+  	int max;
 	
 	if(argc==2)
 		max=atoi(argv[1]);
@@ -60,7 +64,8 @@ int main(int argc,  char** argv) {
       printf("ERROR:     return code from pthread_create() is %d\n", res);
       exit(-1);
     }  
-    int res = pthread_create(&threads[1], NULL, inc2, NULL);
+    
+    res = pthread_create(&threads[1], NULL, inc2, NULL);
 	if(res){
       printf("ERROR:     return code from pthread_create() is %d\n", res);
       exit(-1);
