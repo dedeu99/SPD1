@@ -40,10 +40,10 @@ void printBuffer(Buffer* b){
 		printf("%d,",b->values[i]);
 	printf("\n");
 }
-int isFull(Buffer b){
+int isFull(Buffer* b){
 	return b->numElems==b->maxSize;
 }
-int isEmpty(Buffer b){
+int isEmpty(Buffer* b){
 	return b->numElems==0;
 }
 
@@ -56,20 +56,20 @@ void *spend(void *arg){
 }
 
 void* produce(void *arg){
-	Pthread_mutex_lock(&Buffermutex);
+	pthread_mutex_lock(&Buffermutex);
 	while (isFull(b))
 		Pthread_cond_wait(&cheio, &Buffermutex);
 	make(arg);
-	Pthread_cond_signal(&consumir);
-	Pthread_mutex_unlock(&Buffermutex);
+	pthread_cond_signal(&consumir);
+	pthread_mutex_unlock(&Buffermutex);
 }
 void *consume(void *arg) {
-	Pthread_mutex_lock(&Buffermutex);
+	pthread_mutex_lock(&Buffermutex);
 	while (isEmpty(b))
 		Pthread_cond_wait(&encher, &Buffermutex);
 	spend(arg);
-	Pthread_cond_signal(&consumir); 
-	Pthread_mutex_unlock(&Buffermutex);
+	pthread_cond_signal(&consumir); 
+	pthread_mutex_unlock(&Buffermutex);
 }
 
 
