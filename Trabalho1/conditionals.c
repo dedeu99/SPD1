@@ -120,14 +120,7 @@ int main(int argc,  char** argv) {
 
 
    	
-	for(int t=0;t<nprodutores;t++){
-
-    	int res = pthread_create(&produtores[t], NULL, produce, t);
-    	if(res){
-	      printf("ERROR:     return code from pthread_create() is %d\n", res);
-	      exit(-1);
-	    }    
-	}	
+	
 	for(int t=0;t<nconsumidores;t++){
 
     	int res = pthread_create(&consumidores[t], NULL, consume, t);
@@ -136,17 +129,27 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}
+	for(int t=0;t<nprodutores;t++){
+
+    	int res = pthread_create(&produtores[t], NULL, produce, t);
+    	if(res){
+	      printf("ERROR:     return code from pthread_create() is %d\n", res);
+	      exit(-1);
+	    }    
+	}	
 	for(int t=0;t<15;t++)
 		printBuffer(b);
 
-	for (int i=0; i<nconsumidores; i++) 
-		pthread_join(consumidores[i], NULL);
 	for (int i=0; i<nprodutores; i++) 
 		pthread_join(produtores[i], NULL);
+	for (int i=0; i<nconsumidores; i++) 
+		pthread_join(consumidores[i], NULL);
+	
    
  	pthread_mutex_destroy(&Buffermutex);
 	pthread_cond_destroy(&consumir);
 	pthread_cond_destroy(&consumir);
+	free(b);
 	pthread_exit(NULL);
 
 }
