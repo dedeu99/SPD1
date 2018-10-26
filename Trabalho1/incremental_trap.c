@@ -24,11 +24,8 @@ int main(int argc,  char** argv) {
 		"  <threads>  Number of threads to create that increment a value\n"
 		"\n"
 		"Since every thread increment the same variable only once, it's expected that the final result will be == to <threads>\n"
-		"Try running '$int_trap 10' to confirm such behaviour\n"
-		"Afterwards try running '$int_trap 999' several times and see what happens\n"
-		"To ease the repetion of commands try the following:\n"
-		"'$int_trap 999'\n"
-		"'$!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;'\n");
+		"Try running '$int_trap 1' to confirm such behaviour\n"
+		"Afterwards try running '$int_trap 999'\n");
 	}	
 	
 	pthread_t threads[nthreads];

@@ -66,18 +66,38 @@
 						<a class="dropdown-item" href="#Increment">Introdução</a>
 						<a class="dropdown-item" href="#inc_oqvu">O que vamos utilizar?</a>
 						<a class="dropdown-item" href="#inc_compilacao">Compilação</a>
-						<a class="dropdown-item" href="#inc_programa">helloworld.c</a>
+						<a class="dropdown-item" href="#inc_programa">incremental_trap.c</a>
 						<a class="dropdown-item" href="#inc_output">Output</a>
 						<a class="dropdown-item" href="#inc_oqa">O que aconteceu?</a>
+						<a class="dropdown-item" href="#inc_oqvu2">O que vamos utilizar?</a>
+						<a class="dropdown-item" href="#inc_compilacao2">Compilação</a>
+						<a class="dropdown-item" href="#inc_programa2">incremental.c</a>
+						<a class="dropdown-item" href="#inc_output2">Output</a>
+						<a class="dropdown-item" href="#inc_oqa2">O que aconteceu?</a>
 					</div>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">
-						Hello World2
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+						Mutexes
 					</a>
+					<div class="dropdown-menu dropdown-menu-right">
+						<a class="dropdown-item" href="#Mutexes">Introdução</a>
+						<a class="dropdown-item" href="#mut_oqvu">O que vamos utilizar?</a>
+						<a class="dropdown-item" href="#mut_compilacao">Compilação</a>
+						<a class="dropdown-item" href="#mut_programa">incremental_trap.c</a>
+						<a class="dropdown-item" href="#mut_output">Output</a>
+						<a class="dropdown-item" href="#mut_oqa">O que aconteceu?</a>
+						<a class="dropdown-item" href="#mut_oqvu2">O que vamos utilizar?</a>
+						<a class="dropdown-item" href="#mut_compilacao2">Compilação</a>
+						<a class="dropdown-item" href="#mut_programa2">incremental.c</a>
+						<a class="dropdown-item" href="#mut_output2">Output</a>
+						<a class="dropdown-item" href="#mut_oqa2">O que aconteceu?</a>
+					</div>
 				</li>
 			</ul>
 		</nav>
+
+			
 					</div>
 
 					<div class="col-sm-9">
@@ -149,7 +169,7 @@
                    void *(*start_routine) (void *), void *arg);</code></pre> 
             <p>Cria uma nova thread que tem como ponto de entrada o método passado no terceiro argumento e, esse método, tem como parâmetro o quarto argumento da função pthread_create(). O primeiro parâmetro deverá ser um pointer para o handle da thread. Retorna 0 caso a thread tenha sido criada com sucesso ou um código de erro caso contrário. http://man7.org/linux/man-pages/man3/pthread_create.3.html</p>
 			<pre><code class="c">void pthread_exit(void *retval);</code></pre> 
-			<p>Termina a thread corrente e o seu valor de retorno é usado aquando a invocação da função pthread_join().</p>
+			<p>Termina a thread corrente e o seu valor de retorno é usado aquando a invocação da função pthread_join().http://man7.org/linux/man-pages/man3/pthread_exit.3.html</p>
 
 			<h4 id="hello_compilacao">Compilação</h4>
 			<p>Através do makefile disponibilizado basta executar o seguinte comando na consola (na mesma directoria que o makefile):</p>
@@ -240,18 +260,199 @@ HELLO WORLD BY THREAD 9</kbd>
 
 			<h4 id="inc_oqvu">O que vamos utilizar?</h4>
 			
-			<p>Termina a thread corrente e o seu valor de retorno é usado aquando a invocação da função pthread_join().</p>
+			<p>Nada de novo, vamos apenas atualizar o código existente.</p>
 
-			<h4 id="hello_compilacao">Compilação</h4>
+			<h4 id="inc_compilacao">Compilação</h4>
 			<p>Através do makefile disponibilizado basta executar o seguinte comando na consola (na mesma directoria que o makefile):</p>
-			<kbd>$make hello</kbd>
-			<h4 id="hello_programa">helloworld.c</h4>
+			<kbd>$make inc_trap</kbd>
+			<h4 id="inc_programa">incremental_trap.c</h4>
 			<pre><code class="c">
+
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;pthread.h>
+
+
+int i=0;
+
+void* inc(void * threadid) {
+		i++;
+	pthread_exit(NULL);
+}
+
+int main(int argc,  char** argv) {
+  
+	int nthreads=0;
+	if(argc==2)
+		nthreads=atoi(argv[1]);
+	else{
+		printf(
+		"USAGE: inc_trap &lt;threads>\n"
+		"\n"
+		"ARGUMENTS\n"
+		"  &lt;threads>  Number of threads to create that increment a value\n"
+		"\n"
+		"Since every thread increment the same variable only once, it's expected that the final result will be == to <threads>\n"
+		"Try running '$int_trap 1' to confirm such behaviour\n"
+		"Afterwards try running '$int_trap 999'\n");
+	}	
+	
+	pthread_t threads[nthreads];
+	
+
+	for(int t=0;t< nthreads;++t){
+
+    	int res = pthread_create(&threads[t], NULL, inc, NULL);
+    	if(res){
+	      printf("ERROR:     return code from pthread_create() is %d\n", res);
+	      exit(-1);
+	    }    
+	}	
+
+  	printf("Number of threads:%d   incremental result:%d\n",nthreads,i);
+	pthread_exit(NULL);
+}
 				</code></pre>
-			<h4 id="hello_oqa">O que aconteceu?</h4>
+			<h4 id="inc_output">Output</h4>
+			<kbd>Number of threads:&lt;threads>   incremental result:(&lt;threads>-1)</kbd>
+			<h4 id="inc_oqa">O que aconteceu?</h4>
 			
-			<p>Foram criadas &lt;threads> threads, conforme passado como argumento para a função e cada uma colocou no stdout o seu indice na pool.</p>
-			<p>É de notar que, como cada thread tem uma linha de execução independente poderão não executar pela ordem que foram criadas.</p>
+			<p>Enquanto o main está no ciclo for e, como a instrução de incrementar é simples, as threads executam imediatamente e incrementam o valor corretamente porém, main sendo também ela uma thread tem uma linha de execução diferente e coloca no stdout o resultado antes da última thread o incrementar (pode até acontecer a várias threads).</p>
+			<p>Uma solução seria apenas fazer printf após o pthread_exit pois este, no main, garante que as threads filhas terminem e funciona como um ponto de execução porém tal é impossível visto que o pthread_exit funciona como um return e termina a thread atual...</p>
+			<p>Iremos de seguida ver a solução para este problema</p>
+
+			<h4 id="inc_oqvu2">O que vamos utilizar?</h4>
+			<pre><code class="c">int pthread_join(pthread_t thread, void **retval);</code></pre> 
+			<p>Esta função aguarda que a thread passada como parâmetro termine antes de prosseguir.Coloca em retval o valor passado na função pthread_exit da thread terminada.http://man7.org/linux/man-pages/man3/pthread_join.3.html</p>
+			<h4 id="inc_compilacao2">Compilação</h4>
+			<p>Através do makefile disponibilizado basta executar o seguinte comando na consola (na mesma directoria que o makefile):</p>
+			<kbd>$make inc</kbd>
+			<h4 id="inc_programa2">incremental.c</h4>
+			.</br>
+			.</br>
+			.</br>
+			<pre><code class="c">
+int main(){
+
+.
+.
+.
+for(int t=0;t< nthreads;++t)
+	<b>pthread_join(threads[t], NULL);</b>
+
+	printf("Number of threads:%d   incremental result:%d\n",nthreads,i);
+	pthread_exit(NULL);
+}</code></pre>
+<h4 id="inc_output2">Output</h4>
+			<kbd>Number of threads:&lt;threads>   incremental result:&lt;threads></kbd>
+			<h4 id="inc_oqa2">O que aconteceu?</h4>
+			<p>Ao invocarmos pthread_join sobre todas as threads da pool garantimos que estas terminam antes da função main continuar a sua execução imprimindo assim o valor correcto da variável result.</p>
+			<p>Porém, se executarmos o programa vezes suficientes e com threads suficientes podemos ter um output inesperado...</p>
+
+			 <kbd>$./inc 999<br>
+Number of threads:999   incremental result:999<br>
+$./inc 999;./inc 999;./inc 999;./inc 999;./inc 999;./inc 999;./inc 999;<br>
+Number of threads:999   incremental result:999<br>
+Number of threads:999   incremental result:999<br>
+Number of threads:999   incremental result:999<br>
+Number of threads:999   incremental result:999<br>
+Number of threads:999   incremental result:998        &lt;-----------<br>
+Number of threads:999   incremental result:999<br>
+Number of threads:999   incremental result:999</kbd>
+			s
+</div>
+
+
+
+
+<div class="container-fluid" style="padding-top:70px;padding-bottom:70px" id="Mutexes">
+	<h1>Mutexes</h1>
+	<p>Para resolver problemas de concorrência a API pthreads proporciona-nos mutexes que fornecem acesso atómico às pthreads, ou seja, garantem que, o acesso a recursos partilhados sejam efetuados exclusivamente pela thread que detêm o acesso aos mesmos.</p>
+			<h4 id="mut_oqvu3">O que vamos utilizar?</h4>
+			<pre><code class="c">pthread_mutex_t</code></pre> 
+			<p>Tipo usado para identificar um mutex. http://pubs.opengroup.org/onlinepubs/7908799/xsh/systypes.h.html</p>
+			<pre><code class="c">int pthread_mutex_init(pthread_mutex_t *restrict mutex,
+           const pthread_mutexattr_t *restrict attr);
+int pthread_mutex_destroy(pthread_mutex_t *mutex);</code></pre> 
+			<p>Estas funções criam/destroem um mutex.</p>
+			<pre><code class="c">int pthread_mutex_lock(pthread_mutex_t *mutex);
+int pthread_mutex_unlock(pthread_mutex_t *mutex);</code></pre> 
+			<p>Estas função permitem que uma thread obtenha/disponibilize acesso a um mutex,respectivamente.No caso de unlock o desbloqueio é imediato porém, após invocar o lock, a thread invocadora aguarda até que o acesso esteja disponível e só ent
+			ao prossegue com as restantes instruções.      http://man7.org/linux/man-pages/man3/pthread_mutex_lock.3p.html</p>
+
+
+
+
+			<h4 id="mut_compilacao">Compilação</h4>
+			<p>Através do makefile disponibilizado basta executar o seguinte comando na consola (na mesma directoria que o makefile):</p>
+			<kbd>$make mutexes</kbd>
+			<h4 id="mut_programa">mutexes.c</h4>
+			<pre><code class="c">
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;pthread.h>
+
+
+int i=0;
+pthread_mutex_t i_mutex;
+
+void* inc(void * threadid) {
+
+	pthread_mutex_lock(&i_mutex);
+	i++;
+	pthread_mutex_unlock(&i_mutex);
+
+	pthread_exit(NULL);
+}
+
+int main(int argc,  char** argv) {
+  
+	int nthreads=0;
+	if(argc==2)
+		nthreads=atoi(argv[1]);
+	else{
+		printf(
+		"USAGE: mutexes &lt;threads>\n"
+		"\n"
+		"ARGUMENTS\n"
+		"  &lt;threads>  Number of threads to create that increment a value\n"
+		"\n"
+		"Since every thread increment the same variable only once, it's expected that the final result will be == to <threads>\n"
+		"Try running '$int_trap 10' to confirm such behaviour\n"
+		"Afterwards try running '$int_trap 999' several times and see what happens\n"
+		"To ease the repetion of commands try the following:\n"
+		"'$int_trap 999'\n"
+		"'$!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;'\n");
+	}	
+	
+	pthread_t threads[nthreads];
+	
+	pthread_mutex_init(&i_mutex,NULL);
+
+	for(int t=0;t< nthreads;++t){
+
+    	int res = pthread_create(&threads[t], NULL, inc, NULL);
+    	if(res){
+	      printf("ERROR:     return code from pthread_create() is %d\n", res);
+	      exit(-1);
+	    }    
+	}	
+	
+	for(int t=0;t< nthreads;++t)
+  		pthread_join(threads[t], NULL);
+  	printf("Number of threads:%d   incremental result:%d\n",nthreads,i);
+  	pthread_mutex_destroy(&i_mutex);
+	pthread_exit(NULL);
+}
+</code></pre> 
+
+<h4 id="mut_output">Output</h4>
+			<kbd>Number of threads:&lt;threads>   incremental result:&lt;threads></kbd>
+			<h4 id="inc_oqa2">O que aconteceu?</h4>
+			<p>Após incluirmos mutexes no código da aplicação. cada bloco lock-unlock apenas executa na sua totalidade pela thread detentora do lock, eliminando assim acessos concorrentes à variável incrementada.</p>
+
+			<p>Eis um diagrama a ilustrar a situação:</p>
+			<img src="diagrama2.png">
 		</div>
 
 
@@ -265,23 +466,52 @@ HELLO WORLD BY THREAD 9</kbd>
 			
 			
 
+&lt;
 
-		thread_cancel
-		thread_detach
+
+
+FALTA FALAR DE:
+-		deadlock
+-		nodeadlock
+-		conditionals
+-		parametros
+-		thread_cancel
+-		thread_detach
+-		tipos de atributos para os mutexes
+
+
 
 pthread_exit
 
-When a thread terminates, process-shared resources (e.g., mutexes,
+-When a thread terminates, process-shared resources (e.g., mutexes,
        condition variables, semaphores, and file descriptors) are not
        released, and functions registered using atexit(3) are not called.
 
 
-			This independent flow of control is accomplished because a thread maintains its own:
+
+
+INFO ADICIONAL:
+	This independent flow of control is accomplished because a thread maintains its own:
 Stack pointer
 Registers
 Scheduling properties (such as policy or priority)
 Set of pending and blocked signals
 Thread specific data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 leitura adicional:
@@ -291,9 +521,8 @@ http://www.drdobbs.com/parallel/the-pillars-of-concurrency/200001985
 
 		<br>
 		<footer>
-			<div class="row justify-content-around">  
-				<p>&copy; 2018 SPD</p>   
-				<p>a62362 - </p>
+			<div class="row justify-content-around">     
+				<p>a62362 - aXXXXX - aXXXXX - aXXXXX - aXXXXX</p>
 			</div>
 		</footer>
 </div>

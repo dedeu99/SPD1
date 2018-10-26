@@ -2,46 +2,48 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-int max=0;
-int i=0;
-int j=0;
-pthread_mutex_t i_mutex;
-pthread_mutex_t j_mutex;
+//FILO AKA STACK
+typedef buffer{
+	unsigned int maxSize=0;
+	unsigned int numElems=0;
+	int* values;
 
-void* inc(void * threadid) {
-	while(i<max)
-	{
-		pthread_mutex_lock(&i_mutex);
-		if(!pthread_mutex_trylock(&j_mutex)&&i<max)
-		{
-			i++;
-			j--;
-			pthread_mutex_unlock(&j_mutex);
-		}
-		pthread_mutex_unlock(&i_mutex);
-	}
-	pthread_exit(NULL);
+}Buffer;
+
+Buffer* makeBuffer(int maxSize){
+	Buffer* b=(Buffer*)malloc(sizeof(Buffer));
+	b->values=(int*)malloc(sizeof(int)*maxSize)
+	b->maxSize=maxSize;
+	b->numElems=0;
 }
-void* inc2(void * threadid) {
-	while(i<max-1){
-		pthread_mutex_lock(&j_mutex);
-		if(!pthread_mutex_trylock(&i_mutex)&&i<max-1)
-		{
-			i+=2;
-			j++;
-			pthread_mutex_unlock(&i_mutex);
-		}
-		pthread_mutex_unlock(&j_mutex);
-	}
-	pthread_exit(NULL);
+int push(Buffer* b,int value){
+	if(b->numElems>=b->maxSize)
+		return 0;
+
+	b->values[b->numElems++]=value;
+	return 1;
+}
+int pop(Buffer* b){
+	if(b->numElems==0)
+		return 0;
+	return b->values[b->numElems--];
 }
 
+void *make(void *arg){
+
+
+}
+
+void *consume(void *arg){
+
+
+}
 int main(int argc,  char** argv) {
   	
 	
 	if(argc==2)
 		max=atoi(argv[1]);
-	else{
+	/*else{
 		printf("USAGE: deadlock <max_number>\n"
 		"\n"
 		"ARGUMENTS\n"
@@ -57,7 +59,8 @@ int main(int argc,  char** argv) {
 		"'$no_deadlock 9999'\n"
 		"'$!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;'\n");
 		exit(0);
-	}	
+	}
+	int buffer[max];
 	int nthreads=2;
 	pthread_t threads[nthreads];
 	
@@ -81,5 +84,16 @@ int main(int argc,  char** argv) {
   		pthread_join(threads[t], NULL);
   	printf("Number of threads:%d   incremental result:%d    diff in number of executions:%d\n",nthreads,i,j);
   	pthread_mutex_destroy(&i_mutex);
-	pthread_exit(NULL);
+	pthread_exit(NULL);*/
+
+
+	Buffer* b=makeBuffer(max);
+	b.push(5);
+	b.push(6);
+	b.push(7);
+	printf("%d\n",b,pop());
+	printf("%d\n",b,pop());
+	printf("%d\n",b,pop());	
+
+
 }
