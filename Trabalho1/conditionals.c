@@ -9,7 +9,13 @@ typedef struct buffer{
 	int* values;
 
 }Buffer;
+
 Buffer* b;
+pthread_mutex_t Buffermutex;
+pthread_cond_t consumir, encher;
+
+
+
 Buffer* makeBuffer(int maxSize){
 	Buffer* b=(Buffer*)malloc(sizeof(Buffer));
 	b->values=(int*)malloc(sizeof(int)*maxSize);	
@@ -65,8 +71,6 @@ void *consume(void *arg) {
 	Pthread_cond_signal(&consumir); 
 	Pthread_mutex_unlock(&Buffermutex);
 }
-pthread_mutex_t Buffermutex;
-pthread_cond_t consumir, encher;
 
 
 int main(int argc,  char** argv) {
