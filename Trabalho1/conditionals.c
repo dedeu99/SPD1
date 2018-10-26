@@ -142,15 +142,15 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}	
-	for(int t=0;t<15;t++)
-		printBuffer(b);
+	
 
 	for (int i=0; i<nprodutores; i++) 
 		pthread_join(produtores[i], NULL);
 	for (int i=0; i<nconsumidores; i++) 
 		pthread_join(consumidores[i], NULL);
 	
-   
+   for(int t=0;t<15;t++)
+		printBuffer(b);
  	pthread_mutex_destroy(&Buffermutex);
 	pthread_cond_destroy(&consumir);
 	pthread_cond_destroy(&consumir);
