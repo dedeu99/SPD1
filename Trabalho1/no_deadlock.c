@@ -5,60 +5,25 @@
 int max=0;
 int i=0;
 int j=0;
-pthread_mutex_t i_mutex[];
-pthread_mutex_t j_mutex[];
+pthread_mutex_t i_mutex;
+pthread_mutex_t j_mutex;
 
-typedef matrix{
-	int[][] values;
-	int ncols,nrows;
-}Matrix;
-
-Matrix* initMatrix(int ncols, int nrows){
-	Matrix* m=(Matrix*)malloc(sizeof(Matrix));
-	m->ncols=ncols;
-	m->nrows=nrows;
-
-	m->value=malloc(nrows*sizeof(int*));
-
-	//alloc a continuous array for better use of the cache
-	int* v=malloc(nrows*ncols*sizeof(int));
-	for(int i=0;i<nrows;++i)
-		m->value[i]=v[i*nrows];
-	
-
-	return m;
-}
-void printMatrix(Matrix m,int ncols, int nrows){
-	printf("{");
-	for(int i=nrows;++i){
-		printf("{");
-		for(int j=ncols;++j)
-			printf("%d,",m[i][j]);
-		printf("},");
+void* inc(void * threadid) {
+	while(i < max)
+	{
+		pthread_mutex_lock(&i_mutex);
+		if(!pthread_mutex_trylock(&j_mutex)&&i<max)
+		{
+			i++;
+			j--;
+			pthread_mutex_unlock(&j_mutex);
+		}
+		pthread_mutex_unlock(&i_mutex);
 	}
-	printf("}");
-}
-
-
-void* lineManager(void * matrix) {
-	
-	for(int i=0;i<)
-
-
-	pthread_exit(NULL);
-}
-
-
-
-void* inc(void * ) {
-	
-
-
-
 	pthread_exit(NULL);
 }
 void* inc2(void * threadid) {
-	while(i<max-1){
+	while(i < max-1){
 		pthread_mutex_lock(&j_mutex);
 		if(!pthread_mutex_trylock(&i_mutex)&&i<max-1)
 		{

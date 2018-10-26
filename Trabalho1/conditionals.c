@@ -72,7 +72,7 @@ void* produce(void *arg){
 		pthread_cond_wait(&encher, &Buffermutex);
 	}
 	make(arg);
-	pthread_cond_broadcast(&consumir);
+	pthread_cond_signal(&consumir);
 	pthread_mutex_unlock(&Buffermutex);
 	pthread_exit(NULL);
 }
@@ -83,7 +83,7 @@ void *consume(void *arg) {
 		pthread_cond_wait(&consumir, &Buffermutex);
 	}
 	spend(arg);
-	pthread_cond_broadcast(&encher);
+	pthread_cond_signal(&encher);
 	pthread_mutex_unlock(&Buffermutex);
 	pthread_exit(NULL);
 }
@@ -101,14 +101,17 @@ int main(int argc,  char** argv) {
 		printf("USAGE: conditionals <max> <nproducers> <nconsumers>\n"
 		"\n"
 		"ARGUMENTS\n"
-		"   <max_number>  buffer length\n"
-		"   <nproducers>  number of threads writing to buffer\n"
-		"   <nconsumers>  number of threads reading (consuming) the buffer\n"
+		"   <max_number>  maximum number two threads can count up to\n"
 		"\n"
-		"Producer threads put their own index code in the producers pool inside the buffer.\n"
-		"Consumers threads read and delete the read value from the buffer.\n"
-		"When a producer thread needs to insert a value but the buffer is full it signals the consumers threads to read.\n"
-		"When a consumer thread needs to read a value but the buffer is empty it signals the producer threads to write.\n");
+		"One thread increments a counter be one and one increments a counter by two up to <max_number>.\n"
+		"We count the difference between the number of times thread1 counted and thread2 executed.\n"
+		"If result ==0, both threads executed the same number of times.\n"
+		"If result < 0, thread1 executed abs(result) more times .\n"
+		"If result > 0, thread2 executed abs(result) more times .\n"
+		"Afterwards try running '$no_deadlock <n>' and see what happens for n=9999 several times\n"
+		"To ease the repetion of commands try the following:\n"
+		"'$no_deadlock 9999'\n"
+		"'$!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;'\n");
 		exit(0);
 	}
 
@@ -139,14 +142,15 @@ int main(int argc,  char** argv) {
 	    }    
 	}	
 	
-
+	for(int t=0;t<15;t++)
+		printBuffer(b);
+	
 	for (int i=0; i<nprodutores; i++) 
 		pthread_join(produtores[i], NULL);
 	for (int i=0; i<nconsumidores; i++) 
 		pthread_join(consumidores[i], NULL);
 	
-   for(int t=0;t<15;t++)
-		printBuffer(b);
+   
  	pthread_mutex_destroy(&Buffermutex);
 	pthread_cond_destroy(&consumir);
 	pthread_cond_destroy(&encher);
