@@ -3,7 +3,7 @@
 #include <pthread.h>
 
 //FILO AKA STACK
-typedef buffer{
+typedef struct buffer{
 	unsigned int maxSize=0;
 	unsigned int numElems=0;
 	int* values;
@@ -29,7 +29,7 @@ int pop(Buffer* b){
 	return b->values[b->numElems--];
 }
 
-void *make(void *arg){
+/*void *make(void *arg){
 
 
 }
@@ -37,7 +37,7 @@ void *make(void *arg){
 void *consume(void *arg){
 
 
-}
+}*/
 int main(int argc,  char** argv) {
   	
 	
