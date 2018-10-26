@@ -36,6 +36,11 @@ int pop(Buffer* b){
 	return b->values[--	b->numElems];
 }
 void printBuffer(Buffer* b){
+	if(b->numElems==0){
+		printf("EMPTY\n");
+		return;
+	}
+
 	for(int i=0;i<b->numElems;++b)
 		printf("%d,",b->values[i]);
 	printf("\n");
