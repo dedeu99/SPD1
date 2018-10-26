@@ -88,12 +88,12 @@ int main(int argc,  char** argv) {
 
 
 	Buffer* b=makeBuffer(max);
-	b.push(5);
-	b.push(6);
-	b.push(7);
-	printf("%d\n",b,pop());
-	printf("%d\n",b,pop());
-	printf("%d\n",b,pop());	
+	push(b,5);
+	push(b,6);
+	push(b,7);
+	printf("%d\n",pop(b));
+	printf("%d\n",pop(b));
+	printf("%d\n",pop(b));	
 
 
 }
