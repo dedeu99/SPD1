@@ -58,18 +58,20 @@ void *spend(void *arg){
 void* produce(void *arg){
 	pthread_mutex_lock(&Buffermutex);
 	while (isFull(b))
-		Pthread_cond_wait(&cheio, &Buffermutex);
+		pthread_cond_wait(&cheio, &Buffermutex);
 	make(arg);
 	pthread_cond_signal(&consumir);
 	pthread_mutex_unlock(&Buffermutex);
+	pthread_exit(NULL);
 }
 void *consume(void *arg) {
 	pthread_mutex_lock(&Buffermutex);
 	while (isEmpty(b))
-		Pthread_cond_wait(&encher, &Buffermutex);
+		pthread_cond_wait(&encher, &Buffermutex);
 	spend(arg);
 	pthread_cond_signal(&consumir); 
 	pthread_mutex_unlock(&Buffermutex);
+	pthread_exit(NULL);
 }
 
 
