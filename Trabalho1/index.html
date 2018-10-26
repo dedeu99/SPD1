@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SPD - POSIX Threads</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/cpp.min.js"></script>
+		<script>hljs.initHighlightingOnLoad();</script>
+		
+
+    
+	</head>
+		<body data-spy="scroll" data-target=".navbar" data-offset="50" style="margin-left:0px;>
+
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-3">
+
+		<nav class="navbar bg-dark navbar-dark" style="margin-top:0px;padding-bottom:0px;height: 100%;position: fixed;">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" href="#requisitos">
+						Pré-requisitos
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#thread">
+						O que é uma thread?
+					</a>	
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#aplicabilidade">
+						Aplicabilidade
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#beneficios">
+						Benefícios
+					</a>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+						Hello World
+					</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="#Hello world">Introdução</a>
+						<a class="dropdown-item" href="#hello_oqvu">O que vamos utilizar?</a>
+						<a class="dropdown-item" href="#hello_compilacao">Compilação</a>
+						<a class="dropdown-item" href="#hello_programa">helloworld.c</a>
+						<a class="dropdown-item" href="#hello_output">Output</a>
+						<a class="dropdown-item" href="#hello_oqa">O que aconteceu?</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+						Increment
+					</a>
+					<div class="dropdown-menu dropdown-menu-right">
+						<a class="dropdown-item" href="#Increment">Introdução</a>
+						<a class="dropdown-item" href="#inc_oqvu">O que vamos utilizar?</a>
+						<a class="dropdown-item" href="#inc_compilacao">Compilação</a>
+						<a class="dropdown-item" href="#inc_programa">helloworld.c</a>
+						<a class="dropdown-item" href="#inc_output">Output</a>
+						<a class="dropdown-item" href="#inc_oqa">O que aconteceu?</a>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">
+						Hello World2
+					</a>
+				</li>
+			</ul>
+		</nav>
+					</div>
+
+					<div class="col-sm-9">
+						<div class="container-fluid" style="padding-top:70px;padding-bottom:70px" id="requisitos">
+							<h1>Requisitos</h1>
+							<p>Antes de iniciarmos o estudo da biblioteca pthreads existem alguns conceitos que são necessários, nomeadamente:</p>
+							<ul>
+								<li>Programação na linguagem C : https://www.tutorialspoint.com/cprogramming/ 
+									<ul>
+										<li>Compilação: https://www.tutorialspoint.com/cprogramming/c_program_structure.htm</li>
+										<li></li>
+										<li>Diferença entre stack e heap: https://www.gribblelab.org/CBootCamp/7_Memory_Stack_vs_Heap.html</li>
+									</ul>
+
+								</li>
+								<li>MAKEFILE: https://www.tutorialspoint.com/makefile/index.htm</li>
+								<li>Processos UNIX : </li>
+							</ul>
+						</div>
+						<div class="container-fluid" style="padding-top:70px;padding-bottom:70px" id="thread">
+							<h1>O que é uma thread?</h1>
+							<p>Uma thread pode ser compreendida como um fio de execução independente ainda que contido no âmbito de um processo, ou seja, uma thread possui acesso a recursos do processo do qual origina porém é gerido independentemente pelo sistema operativo.</p>
+							<p>Uma boa metáfora para compreendermos como funcionam os programas tradicionais e os programas que utilizam multi threading seria imaginar o funcionamento de um restaurante. Com apenas um trabalhador, este teria de atender os clientes, levantar os pedidos, cozinhar, servir à mesa e fazer caixa. Imaginando agora que temos cinco trabalhadores nesse mesmo restaurante, cada um poderia estar designado a uma dessas tarefas e estas seriam executadas simultaneamente com os restantes, melhorando assim o funcionamento do restaurante.</p>
+						</div>
+						<div class="container-fluid" style="padding-top:70px;padding-bottom:70px" id="aplicabilidade">
+							<h1>Aplicabilidade</h1>
+							<p>As Pthreads permitem ao programador criar threads no seu programa que executam independentemente do código principal, ou seja, permitem que o computador execute duas tarefas ou mais tarefas em simultâneo, reduzindo assim o tempo necessário para a execução do programa. Numa arquitetura em série o tempo necessário para a execução de programas é muito maior pois não existem threads para executar cada uma das tarefas que o programa pede singularmente.</p>
+							<p>Existem três padrões de desenho de threads comuns:</p>
+							<ol>
+								<li>Thread Pool (Manager/worker) - Consiste numa thread que delega outras threads executar certas tarefas. A thread que delega tarefas tem o nome de Manager e existe uma worker thread pool onde se encontram todas as threads antes de serem delegadas para executar as várias tarefa.</li>
+								<li>Peer (Workcrew) – Este modelo é parecido ao anterior com exceção de que assim que todas as threads que se encontram na work pool forem designadas para executar as suas tarefas, a thread Manager passa a ser mais uma thread dentro da work pool que executa também as tarefas.</li>
+								<li>Pipeline – Cada thread trabalha com informação processada pela thread anterior e entrega à próxima thread. È necessário ter cuidado na distribuição de trabalho entre as threads para não acontecer bloqueios. Um exemplo prático é as construções dos carros nas fábricas em que cada máquina monta a peça que é suposto montar e passa o carro para a máquina seguinte para esta montar outra peça.</li>
+							</ol>
+							<p>O uso de Pthreads é muito útil pois quando comparado com o custo de criação de processos, as Threads podem ser criadas com muito menos recursos do sistema operativo. Em termos de comunicação e intercambio de informação as Pthreads também tem uma performance muito boa pois as Threads possuem o mesmo espaço de endereçamento dentro de um processo. Logo não existe a necessidade de transferir informação.</p>
+							<p>As threads são apropriadas quando o programador se depara com:</p>
+							<ul>
+								<li>Operações assincronas como operações I/O potencialmente longas</li>
+								<li>Operações que independentes que podem ser paralelizadas</li>
+								<li>Operações que são executadas continuamente em background</li>
+							</ul>
+						</div>
+
+						<div class="container-fluid" style="padding-top:70px;padding-bottom:70px" id="beneficios">
+							<h1>Benefícios</h1>
+							<p>Quando diversas threads são executadas numa arquitectura multicore, numa aplicação com um desenho eficiente (com uma divisão de tarefas no código e sincronismos bem planeados), é possível obter melhorias de performance.</p>
+							<p>Comparativamente ao uso de vários processos, o uso de várias threads num processo reduz o tempo necessário para a troca de informação, visto que as threads usam os recursos de um mesmo processo, e evita a troca entre processos o que é uma operação que requere bastantes recursos da CPU</p>
+
+
+
+
+						
+						<p>É também importante salientar que:</p>
+						<ul>
+							<li>demasiadas threads num sistema poderá diminuir o desempenho da aplicação visto que o sistema operativo poderá gastar mais ciclos de CPU a processar a troca entre threads do que a executar as threads em si</li>
+							<li>demasiado sincronismo entre threads poderá provocar uma diminuição da performance da aplicação visto que operações de sincronização são demoradas</li>
+							<li>a criação de threads poderá diminuir a performance da cache de um processo</li>
+						</ul>
+
+						</div>
+						
+						<div class="container-fluid" style="padding-top:70px;padding-bottom:70px" id="Hello world">
+			<h1>Hello world</h1>
+			<p>Para iniciarmos o estudo das pthreads, como habitual, iremos contruir um exemplo helloworld. O executável espera um parâmetro na linha de comandos que indica o número de threads a executar e, cada thread irá colocar no stdout uma pequena mensagem com o seu índice na pool das threads.</p>
+
+			<h4 id="hello_oqvu">O que vamos utilizar?</h4>
+			<pre><code class="c">pthread_t</code></pre>
+			<p>Tipo usado para identificar uma thread - http://pubs.opengroup.org/onlinepubs/7908799/xsh/systypes.h.html</p>
+			<pre><code class="c">int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                   void *(*start_routine) (void *), void *arg);</code></pre> 
+            <p>Cria uma nova thread que tem como ponto de entrada o método passado no terceiro argumento e, esse método, tem como parâmetro o quarto argumento da função pthread_create(). O primeiro parâmetro deverá ser um pointer para o handle da thread. Retorna 0 caso a thread tenha sido criada com sucesso ou um código de erro caso contrário. http://man7.org/linux/man-pages/man3/pthread_create.3.html</p>
+			<pre><code class="c">void pthread_exit(void *retval);</code></pre> 
+			<p>Termina a thread corrente e o seu valor de retorno é usado aquando a invocação da função pthread_join().</p>
+
+			<h4 id="hello_compilacao">Compilação</h4>
+			<p>Através do makefile disponibilizado basta executar o seguinte comando na consola (na mesma directoria que o makefile):</p>
+			<kbd>$make hello</kbd>
+			<h4 id="hello_programa">helloworld.c</h4>
+			<pre><code class="c">
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;pthread.h>
+
+
+
+void* hello(void * thread) {
+  printf("HELLO WORLD BY THREAD %ld\n",(long)thread);
+
+  pthread_exit(NULL);
+}
+
+int main(int argc,  char** argv) {
+  int nthreads=0;
+  if(argc==2)
+    nthreads=atoi(argv[1]);
+  else{
+    printf(
+    "USAGE: helloworld &lt;threads>\n"
+    "\n"
+    "ARGUMENTS\n"
+    "  &lt;threads>  Number of threads to create that increment a value\n"
+    "\n"
+    "Creates &lt;threads> threads and makes them print their a message with their index in the pool to stdout.\n");
+    exit(0);
+  } 
+  pthread_t threads[nthreads];
+  int i=0;
+
+  for(i=0;i< nthreads;++i){
+
+    int res = pthread_create(&threads[i], NULL, hello, (void*)i);
+    if(res){
+      printf("ERROR:     return code from pthread_create() is %d\n", res);
+      exit(-1);
+    }    
+  }
+  
+  
+/*calling exit(0) will terminate the whole process and, consequently, the threads.
+Use pthread_exit to make sure the process only gets terminated upon all threads completion.*/
+    pthread_exit(NULL); 
+}
+			</code></pre>
+			<h4 id="hello_output">Output</h4>
+			<kbd>HELLO WORLD BY THREAD 0<br>
+HELLO WORLD BY THREAD 7<br>
+HELLO WORLD BY THREAD 2<br>
+HELLO WORLD BY THREAD 3<br>
+HELLO WORLD BY THREAD 4<br>
+HELLO WORLD BY THREAD 5<br>
+HELLO WORLD BY THREAD 6<br>
+HELLO WORLD BY THREAD 1<br>
+HELLO WORLD BY THREAD 8<br>
+HELLO WORLD BY THREAD 9</kbd>
+			<h4 id="hello_oqa">O que aconteceu?</h4>
+			
+			<p>Foram criadas &lt;threads> threads, conforme passado como argumento para a função e cada uma colocou no stdout o seu indice na pool.</p>
+			<p>É de notar que, como cada thread tem uma linha de execução independente, poderão não executar pela ordem que foram criadas.</p>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<div class="container-fluid" style="padding-top:70px;padding-bottom:70px" id="Increment">
+
+
+			<h1>Increment</h1>
+			<p>Queremos agora que as thread efetuem algo mais que colocar strings no stdout. Para o propósito desta página iremos atualizar o código anterior, criando agora uma variável global que será incrementada apenas uma vez pelas várias threads e comentar os resultados obtidos.</p>
+
+			<h4 id="inc_oqvu">O que vamos utilizar?</h4>
+			
+			<p>Termina a thread corrente e o seu valor de retorno é usado aquando a invocação da função pthread_join().</p>
+
+			<h4 id="hello_compilacao">Compilação</h4>
+			<p>Através do makefile disponibilizado basta executar o seguinte comando na consola (na mesma directoria que o makefile):</p>
+			<kbd>$make hello</kbd>
+			<h4 id="hello_programa">helloworld.c</h4>
+			<pre><code class="c">
+				</code></pre>
+			<h4 id="hello_oqa">O que aconteceu?</h4>
+			
+			<p>Foram criadas &lt;threads> threads, conforme passado como argumento para a função e cada uma colocou no stdout o seu indice na pool.</p>
+			<p>É de notar que, como cada thread tem uma linha de execução independente poderão não executar pela ordem que foram criadas.</p>
+		</div>
+
+
+
+					</div>
+
+
+
+
+				</div>
+			
+			
+
+
+		thread_cancel
+		thread_detach
+
+pthread_exit
+
+When a thread terminates, process-shared resources (e.g., mutexes,
+       condition variables, semaphores, and file descriptors) are not
+       released, and functions registered using atexit(3) are not called.
+
+
+			This independent flow of control is accomplished because a thread maintains its own:
+Stack pointer
+Registers
+Scheduling properties (such as policy or priority)
+Set of pending and blocked signals
+Thread specific data.
+
+
+leitura adicional:
+http://www.drdobbs.com/parallel/the-pillars-of-concurrency/200001985
+
+
+
+		<br>
+		<footer>
+			<div class="row justify-content-around">  
+				<p>&copy; 2018 SPD</p>   
+				<p>a62362 - </p>
+			</div>
+		</footer>
+</div>
+  
+	</body>
+</html>

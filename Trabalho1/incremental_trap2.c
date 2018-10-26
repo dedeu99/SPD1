@@ -18,13 +18,17 @@ int main(int argc,  char** argv) {
 		nthreads=atoi(argv[1]);
 	else{
 		printf(
-		"USAGE: inc <threads>\n"
+		"USAGE: inc_trap <threads>\n"
 		"\n"
 		"ARGUMENTS\n"
 		"  <threads>  Number of threads to create that increment a value\n"
 		"\n"
 		"Since every thread increment the same variable only once, it's expected that the final result will be == to <threads>\n"
-		"Try running '$int_trap 10' to confirm such behaviour\n");
+		"Try running '$int_trap 10' to confirm such behaviour\n"
+		"Afterwards try running '$int_trap 999' several times and see what happens\n"
+		"To ease the repetion of commands try the following:\n"
+		"'$int_trap 999'\n"
+		"'$!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;'\n");
 	}	
 	
 	pthread_t threads[nthreads];
@@ -38,7 +42,9 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}	
+	for(int t=0;t<nthreads;++t)
+  		pthread_join(threads[t], NULL);
 
   	printf("Number of threads:%d   incremental result:%d\n",nthreads,i);
-		
+	pthread_exit(NULL);
 }
