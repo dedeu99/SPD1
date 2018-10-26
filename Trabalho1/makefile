@@ -20,7 +20,7 @@ inc_trap: $(INCTRAP) makefile
 	$(CC) $(CFLAGS) $(INCTRAP) $(LDFLAGS) -o $@
 
 inc_trap2: $(INCTRAP2) makefile
-	$(CC) $(CFLAGS) $(INCTRAP) $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) $(INCTRAP2) $(LDFLAGS) -o $@
 
 mutexes: $(MUTEXES) makefile
 	$(CC) $(CFLAGS) $(MUTEXES) $(LDFLAGS) -o $@
