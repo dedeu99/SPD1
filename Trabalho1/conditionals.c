@@ -68,6 +68,7 @@ void spend(void *arg){
 void* produce(void *arg){
 	pthread_mutex_lock(&Buffermutex);
 	while (isFull(b)){
+		printf("%s\n", "esta cheio??");
 		pthread_cond_signal(&consumir);
 		pthread_cond_wait(&encher, &Buffermutex);
 	}
