@@ -9,7 +9,7 @@ typedef struct buffer{
 	int* values;
 
 }Buffer;
-
+Buffer* b;
 Buffer* makeBuffer(int maxSize){
 	Buffer* b=(Buffer*)malloc(sizeof(Buffer));
 	b->values=(int*)malloc(sizeof(int)*maxSize);	
@@ -27,24 +27,57 @@ int push(Buffer* b,int value){
 int pop(Buffer* b){
 	if(b->numElems==0)
 		return 0;
-	return b->values[--b->numElems];
+	return b->values[--	b->numElems];
+}
+void printBuffer(Buffer* b){
+	for(int i=0;i<b->numElems;++b)
+		printf("%d,",b->values[i]);
+	printf("\n");
+}
+int isFull(Buffer b){
+	return b->numElems==b->maxSize;
+}
+int isEmpty(Buffer b){
+	return b->numElems==0;
 }
 
-/*void *make(void *arg){
-
-
+void *make(void *arg){
+	push(b,(int)arg);
 }
 
-void *consume(void *arg){
+void *spend(void *arg){
+	pop(b);
+}
+
+void* produce(void *arg){
+	Pthread_mutex_lock(&Buffermutex);
+	while (isFull(b))
+		Pthread_cond_wait(&cheio, &Buffermutex);
+	make(arg);
+	Pthread_cond_signal(&consumir);
+	Pthread_mutex_unlock(&Buffermutex);
+}
+void *consume(void *arg) {
+	Pthread_mutex_lock(&Buffermutex);
+	while (isEmpty(b))
+		Pthread_cond_wait(&encher, &Buffermutex);
+	spend(arg);
+	Pthread_cond_signal(&consumir); 
+	Pthread_mutex_unlock(&Buffermutex);
+}
+pthread_mutex_t Buffermutex;
+pthread_cond_t consumir, encher;
 
 
-}*/
 int main(int argc,  char** argv) {
-  	int max;
+  	int max=0;
 	
-	if(argc==2)
+	if(argc==4){
 		max=atoi(argv[1]);
-	/*else{
+		nconsumidores=atoi(argv[2]);
+		nprodutores=atoi(argv[3]);
+
+	}else{
 		printf("USAGE: deadlock <max_number>\n"
 		"\n"
 		"ARGUMENTS\n"
@@ -61,40 +94,44 @@ int main(int argc,  char** argv) {
 		"'$!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;!!;'\n");
 		exit(0);
 	}
-	int buffer[max];
-	int nthreads=2;
-	pthread_t threads[nthreads];
-	
-	pthread_mutex_init(&i_mutex,NULL);
-	pthread_mutex_init(&j_mutex,NULL);
+
+	pthread_t consumidores[nconsumidores],produtores[nprodutores];
+	b=makeBuffer(max);
+
+	pthread_mutex_init(&Buffermutex, NULL);
+   	pthread_cond_init (&consumir, NULL);
+   	pthread_cond_init (&encher, NULL);
 
 
-	int res = pthread_create(&threads[0], NULL, inc, NULL);
-	if(res){
-      printf("ERROR:     return code from pthread_create() is %d\n", res);
-      exit(-1);
-    }  
-    
-    res = pthread_create(&threads[1], NULL, inc2, NULL);
-	if(res){
-      printf("ERROR:     return code from pthread_create() is %d\n", res);
-      exit(-1);
-    }  
+   	for(int t=0;t<nconsumidores;++t){
 
-	for(int t=0;t<nthreads;++t)
-  		pthread_join(threads[t], NULL);
-  	printf("Number of threads:%d   incremental result:%d    diff in number of executions:%d\n",nthreads,i,j);
-  	pthread_mutex_destroy(&i_mutex);
-	pthread_exit(NULL);*/
+    	int res = pthread_create(&consumidores[t], NULL, consume, t);
+    	if(res){
+	      printf("ERROR:     return code from pthread_create() is %d\n", res);
+	      exit(-1);
+	    }    
+	}
+	for(int t=0;t<nprodutores;++t){
+
+    	int res = pthread_create(&produtores[t], NULL, produce, t);
+    	if(res){
+	      printf("ERROR:     return code from pthread_create() is %d\n", res);
+	      exit(-1);
+	    }    
+	}	
 
 
-	Buffer* b=makeBuffer(max);
-	push(b,5);
-	push(b,6);
-	push(b,7);
-	printf("%d\n",pop(b));
-	printf("%d\n",pop(b));
-	printf("%d\n",pop(b));	
 
+
+
+	for (int i=0; i<nconsumidores; i++) 
+		pthread_join(consumidores[i], NULL);
+	for (int i=0; i<nprodutores; i++) 
+		pthread_join(produtores[i], NULL);
+   
+ 	pthread_mutex_destroy(&Buffermutex);
+	pthread_cond_destroy(&consumir);
+	pthread_cond_destroy(&consumir);
+	pthread_exit(NULL);
 
 }
