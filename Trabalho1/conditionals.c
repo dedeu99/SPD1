@@ -23,6 +23,10 @@ Buffer* makeBuffer(int maxSize){
 	b->numElems=0;
 	return b;
 }
+void freeBuffer(Buffer* b){
+	free(b->values);
+	free(b);
+}
 int push(Buffer* b,int value){
 	if(b->numElems>=b->maxSize)
 		return 0;
@@ -132,7 +136,7 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}
-	while(1)
+	for(int t=0;t<15;t++){
 		printBuffer(b);
 
 	for (int i=0; i<nconsumidores; i++) 
