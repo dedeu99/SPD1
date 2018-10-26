@@ -27,7 +27,7 @@ int push(Buffer* b,int value){
 int pop(Buffer* b){
 	if(b->numElems==0)
 		return 0;
-	return b->values[b->numElems--];
+	return b->values[--b->numElems];
 }
 
 /*void *make(void *arg){
