@@ -4,8 +4,8 @@
 
 //FILO AKA STACK
 typedef struct buffer{
-	unsigned int maxSize=0;
-	unsigned int numElems=0;
+	unsigned int maxSize;
+	unsigned int numElems;
 	int* values;
 
 }Buffer;
