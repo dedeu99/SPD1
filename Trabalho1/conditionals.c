@@ -84,7 +84,7 @@ int main(int argc,  char** argv) {
 		nprodutores=atoi(argv[3]);
 
 	}else{
-		printf("USAGE: deadlock <max_number>\n"
+		printf("USAGE: conditionals <max> <nproducers> <nconsumers>\n"
 		"\n"
 		"ARGUMENTS\n"
 		"   <max_number>  maximum number two threads can count up to\n"
@@ -109,7 +109,7 @@ int main(int argc,  char** argv) {
    	pthread_cond_init (&encher, NULL);
 
 
-   	for(int t=0;t<nconsumidores;++t){
+   	for(int t=0;t<nconsumidores;t++){
 
     	int res = pthread_create(&consumidores[t], NULL, consume, t);
     	if(res){
@@ -117,7 +117,7 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}
-	for(int t=0;t<nprodutores;++t){
+	for(int t=0;t<nprodutores;t++){
 
     	int res = pthread_create(&produtores[t], NULL, produce, t);
     	if(res){
@@ -126,9 +126,8 @@ int main(int argc,  char** argv) {
 	    }    
 	}	
 
-
-
-
+	while(1)
+		printBuffer(b);
 
 	for (int i=0; i<nconsumidores; i++) 
 		pthread_join(consumidores[i], NULL);
