@@ -54,7 +54,7 @@ int isEmpty(Buffer* b){
 
 void make(void *arg){
 	push(b,(int)arg);
-	printf("put %d\n",int)arg);
+	printf("put %d\n",int(arg);
 }
 
 void spend(void *arg){
