@@ -109,14 +109,7 @@ int main(int argc,  char** argv) {
    	pthread_cond_init (&encher, NULL);
 
 
-   	for(int t=0;t<nconsumidores;t++){
-
-    	int res = pthread_create(&consumidores[t], NULL, consume, t);
-    	if(res){
-	      printf("ERROR:     return code from pthread_create() is %d\n", res);
-	      exit(-1);
-	    }    
-	}
+   	
 	for(int t=0;t<nprodutores;t++){
 
     	int res = pthread_create(&produtores[t], NULL, produce, t);
@@ -125,7 +118,14 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}	
+	for(int t=0;t<nconsumidores;t++){
 
+    	int res = pthread_create(&consumidores[t], NULL, consume, t);
+    	if(res){
+	      printf("ERROR:     return code from pthread_create() is %d\n", res);
+	      exit(-1);
+	    }    
+	}
 	while(1)
 		printBuffer(b);
 
