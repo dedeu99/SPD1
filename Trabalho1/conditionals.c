@@ -41,7 +41,7 @@ void printBuffer(Buffer* b){
 		return;
 	}
 
-	for(int i=0;i<b->numElems;++b)
+	for(int i=0;i<b->numElems;++i)
 		printf("%d,",b->values[i]);
 	printf("\n");
 }
@@ -54,7 +54,7 @@ int isEmpty(Buffer* b){
 
 void make(void *arg){
 	push(b,(int)arg);
-	printf("put %d\n",(int)arg);
+	//printf("put %d\n",(int)arg);
 }
 
 void spend(void *arg){
@@ -132,8 +132,8 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}
-	/*while(1)
-		printBuffer(b);*/
+	while(1)
+		printBuffer(b);
 
 	for (int i=0; i<nconsumidores; i++) 
 		pthread_join(consumidores[i], NULL);
