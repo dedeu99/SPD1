@@ -58,7 +58,7 @@ void *spend(void *arg){
 void* produce(void *arg){
 	pthread_mutex_lock(&Buffermutex);
 	while (isFull(b))
-		pthread_cond_wait(&cheio, &Buffermutex);
+		pthread_cond_wait(&encher, &Buffermutex);
 	make(arg);
 	pthread_cond_signal(&consumir);
 	pthread_mutex_unlock(&Buffermutex);
@@ -67,16 +67,16 @@ void* produce(void *arg){
 void *consume(void *arg) {
 	pthread_mutex_lock(&Buffermutex);
 	while (isEmpty(b))
-		pthread_cond_wait(&encher, &Buffermutex);
+		pthread_cond_wait(&consumir, &Buffermutex);
 	spend(arg);
-	pthread_cond_signal(&consumir); 
+	pthread_cond_signal(&encher); 
 	pthread_mutex_unlock(&Buffermutex);
 	pthread_exit(NULL);
 }
 
 
 int main(int argc,  char** argv) {
-  	int max=0;
+  	int max=0,nconsumidores=0,nprodutores=0;
 	
 	if(argc==4){
 		max=atoi(argv[1]);
