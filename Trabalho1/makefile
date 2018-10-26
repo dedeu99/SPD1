@@ -4,7 +4,7 @@ LDFLAGS = -lm -pthread
 
 HELLO = helloworld.c
 INCTRAP = incremental_trap.c
-INCTRAP2 = incremental2_trap.c
+INCTRAP2 = incremental_trap2.c
 MUTEXES = mutexes.c
 DEADLOCK = deadlock.c
 NODEADLOCK = no_deadlock.c
