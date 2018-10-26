@@ -9,7 +9,7 @@ MUTEXES = mutexes.c
 DEADLOCK = deadlock.c
 NODEADLOCK = no_deadlock.c
 
-all: hello inc_trap mutexes deadlock no_deadlock
+all: hello inc_trap inc_trap2 mutexes deadlock no_deadlock
 .PHONY: all
 
 
