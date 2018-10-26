@@ -153,7 +153,7 @@ int main(int argc,  char** argv) {
 		printBuffer(b);
  	pthread_mutex_destroy(&Buffermutex);
 	pthread_cond_destroy(&consumir);
-	pthread_cond_destroy(&consumir);
+	pthread_cond_destroy(&encher);
 	free(b);
 	pthread_exit(NULL);
 
