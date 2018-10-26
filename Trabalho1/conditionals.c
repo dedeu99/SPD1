@@ -12,9 +12,10 @@ typedef struct buffer{
 
 Buffer* makeBuffer(int maxSize){
 	Buffer* b=(Buffer*)malloc(sizeof(Buffer));
-	b->values=(int*)malloc(sizeof(int)*maxSize)
+	b->values=(int*)malloc(sizeof(int)*maxSize);	
 	b->maxSize=maxSize;
 	b->numElems=0;
+	return b;
 }
 int push(Buffer* b,int value){
 	if(b->numElems>=b->maxSize)
@@ -39,7 +40,7 @@ void *consume(void *arg){
 
 }*/
 int main(int argc,  char** argv) {
-  	
+  	int max;
 	
 	if(argc==2)
 		max=atoi(argv[1]);
