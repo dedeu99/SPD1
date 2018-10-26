@@ -10,7 +10,7 @@ DEADLOCK = deadlock.c
 NODEADLOCK = no_deadlock.c
 CONDS = conditionals.c
 
-all: hello inc_trap inc_trap2 mutexes deadlock no_deadlock conditionals
+all: hello inc_trap inc mutexes deadlock no_deadlock conditionals
 .PHONY: all
 
 
