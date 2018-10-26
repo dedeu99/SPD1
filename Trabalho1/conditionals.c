@@ -47,11 +47,11 @@ int isEmpty(Buffer* b){
 	return b->numElems==0;
 }
 
-void *make(void *arg){
+void make(void *arg){
 	push(b,(int)arg);
 }
 
-void *spend(void *arg){
+void spend(void *arg){
 	pop(b);
 }
 
