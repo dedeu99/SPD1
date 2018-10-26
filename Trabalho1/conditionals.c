@@ -136,7 +136,7 @@ int main(int argc,  char** argv) {
 	      exit(-1);
 	    }    
 	}
-	for(int t=0;t<15;t++){
+	for(int t=0;t<15;t++)
 		printBuffer(b);
 
 	for (int i=0; i<nconsumidores; i++) 
